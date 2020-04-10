@@ -19,6 +19,18 @@
         android:supportsRtl="true"
         android:theme="@style/CameraRoll.Theme">
 
+        <service
+            android:name=".dsa.DSAClientService"
+            android:enabled="true"
+            android:exported="true"></service>
+        <receiver android:name=".dsa.DSAClientService"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="ca.uwaterloo.crysp.sharingmodeservice">
+                </action>
+            </intent-filter>
+        </receiver>
+
         <activity
             android:name=".ui.MainActivity"
             android:launchMode="singleTop"

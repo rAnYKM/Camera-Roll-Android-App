@@ -32,7 +32,7 @@ import us.koller.cameraroll.data.provider.MediaProvider;
 import us.koller.cameraroll.util.Util;
 
 //simple BaseActivity that handles LocalBroadcastReceivers, need for communication with FileOperationServices
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends SecureActivity {
 
     // that VectorDrawables work on pre-Lollipop
     static {

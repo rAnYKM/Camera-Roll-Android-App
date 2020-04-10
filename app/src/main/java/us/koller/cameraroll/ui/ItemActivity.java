@@ -108,6 +108,22 @@ public class ItemActivity extends ThemeableActivity {
 
     private boolean isReturning;
 
+    // sharing mode
+    @Override
+    public void onSharingStatusChanged(boolean status) {
+        Log.d("DSA", "Child Class Invoked");
+        if (status != sharing) {
+            Log.d("Sharing", "status changed");
+            super.onSharingStatusChanged(status);
+            recreate();
+        }
+        else {
+            super.onSharingStatusChanged(status);
+        }
+
+    }
+
+
     private final SharedElementCallback sharedElementCallback = new SharedElementCallback() {
         @Override
         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -171,6 +187,7 @@ public class ItemActivity extends ThemeableActivity {
 
         view_only = getIntent().getBooleanExtra(VIEW_ONLY, false);
 
+
         if (!view_only && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && showAnimations()) {
             if (savedInstanceState == null) {
                 postponeEnterTransition();
@@ -189,7 +206,7 @@ public class ItemActivity extends ThemeableActivity {
 
         bottomBar = findViewById(R.id.bottom_bar);
 
-        if (view_only) {
+        if (view_only || sharing) {
             ImageView delete = findViewById(R.id.delete_button);
             ((View) delete.getParent()).setVisibility(View.GONE);
 
