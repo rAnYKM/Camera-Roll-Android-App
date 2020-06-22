@@ -111,11 +111,16 @@ public class ItemActivity extends ThemeableActivity {
     // sharing mode
     @Override
     public void onSharingStatusChanged(boolean status) {
-        Log.d("DSA", "Child Class Invoked");
-        if (status != sharing) {
+        // Log.d("DSA", "Child Class Invoked");
+        if (status) {
             Log.d("Sharing", "status changed");
             super.onSharingStatusChanged(status);
-            recreate();
+            ImageView delete = findViewById(R.id.delete_button);
+            ((View) delete.getParent()).setVisibility(View.GONE);
+
+            ImageView edit = findViewById(R.id.edit_button);
+            ((View) edit.getParent()).setVisibility(View.GONE);
+            //recreate();
         }
         else {
             super.onSharingStatusChanged(status);
