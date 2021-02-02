@@ -1,4 +1,4 @@
-package us.koller.cameraroll.ia;
+package ca.uwaterloo.crysp.libdsaclient.ia;
 
 import java.io.Serializable;
 import java.util.ArrayList;

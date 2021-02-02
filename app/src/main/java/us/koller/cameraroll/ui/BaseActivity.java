@@ -10,19 +10,17 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.AppCompatDelegate;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatDelegate;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Set;
 
 import us.koller.cameraroll.R;
 import us.koller.cameraroll.data.fileOperations.FileOperation;
@@ -30,6 +28,9 @@ import us.koller.cameraroll.data.Settings;
 import us.koller.cameraroll.data.models.Album;
 import us.koller.cameraroll.data.provider.MediaProvider;
 import us.koller.cameraroll.util.Util;
+
+import ca.uwaterloo.crysp.libdsaclient.SecureActivity;
+
 
 //simple BaseActivity that handles LocalBroadcastReceivers, need for communication with FileOperationServices
 public abstract class BaseActivity extends SecureActivity {
@@ -116,6 +117,7 @@ public abstract class BaseActivity extends SecureActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case MainActivity.REMOVABLE_STORAGE_PERMISSION_REQUEST_CODE:
                 if (resultCode == RESULT_OK && workIntent != null) {

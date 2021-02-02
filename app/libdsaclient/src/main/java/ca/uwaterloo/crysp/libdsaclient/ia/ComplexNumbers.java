@@ -1,4 +1,4 @@
-package us.koller.cameraroll.ia;
+package ca.uwaterloo.crysp.libdsaclient.ia;
 
 /*************************************************************************
 source: http://introcs.cs.princeton.edu/java/97data/Complex.java.html

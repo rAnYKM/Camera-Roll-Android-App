@@ -1,4 +1,4 @@
-package us.koller.cameraroll.dsa;
+package ca.uwaterloo.crysp.libdsaclient.dsa;
 
 public class DSAConstant {
     public static final String REMOTE_SERVICE_NAME = "ca.uwaterloo.crysp.sharingmodeservice";

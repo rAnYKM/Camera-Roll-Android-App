@@ -1,16 +1,18 @@
-package us.koller.cameraroll.ui;
+package ca.uwaterloo.crysp.libdsaclient;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.databinding.BindingAdapter;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Toast;
 
 import java.io.File;
@@ -18,12 +20,13 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
-import ca.uwaterloo.crysp.sharingmodeservice.ISharingModeServiceInterface;
-import us.koller.cameraroll.ia.TouchFeatures;
-import us.koller.cameraroll.ia.TrainingSet;
-import us.koller.cameraroll.dsa.DSAClientService;
-import us.koller.cameraroll.dsa.DSAConstant;
+import ca.uwaterloo.crysp.libdsaclient.ia.TouchFeatures;
+import ca.uwaterloo.crysp.libdsaclient.ia.TrainingSet;
+import ca.uwaterloo.crysp.libdsaclient.dsa.DSAClientService;
+import ca.uwaterloo.crysp.libdsaclient.dsa.DSAConstant;
 
 public class SecureActivity extends AppCompatActivity {
     private static final String BASE_TAG = "Itus";
@@ -39,8 +42,15 @@ public class SecureActivity extends AppCompatActivity {
 
     int fvSize;
     public static boolean goodToBlock = true;
-    static boolean sharing = false;
+    public static boolean sharing = false;
     private boolean topActivity = false;
+
+
+    // utility related variable
+    // auto hidden view list
+    private List<View> autoHiddenViews;
+    private List<View> autoDisableViews;
+
 
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -97,12 +107,46 @@ public class SecureActivity extends AppCompatActivity {
     public void onSharingStatusChanged(boolean status) {
         sharing = status;
         Log.d(BASE_TAG, "Sharing status changed: " + status);
+        if(status) {
+            disableViews();
+            hideViews();
+        } else {
+            recoverViews();
+        }
+    }
+
+
+    public void hideViews() {
+        for(View view: autoHiddenViews) {
+            view.setVisibility(View.GONE);
+        }
+    }
+
+    public void disableViews() {
+        for(View view: autoDisableViews) {
+            view.setEnabled(false);
+        }
+    }
+
+    public void recoverViews() {
+        for(View view: autoHiddenViews) {
+            view.setVisibility(View.GONE);
+        }
+
+        for(View view: autoDisableViews) {
+            view.setEnabled(true);
+        }
     }
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // initialize utility variables
+        autoDisableViews = new ArrayList<>();
+        autoHiddenViews = new ArrayList<>();
+
+
         // DSA start service
         Intent intent = new Intent(this, DSAClientService.class);
         startService(intent);
@@ -110,9 +154,6 @@ public class SecureActivity extends AppCompatActivity {
         // DSA local broadcast
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver,
                 new IntentFilter(DSAConstant.ACTION_ACQUIRE_SHARING_STATUS));
-
-
-
     }
 
     private void updateMode(int mode) {
@@ -301,5 +342,29 @@ public class SecureActivity extends AppCompatActivity {
         editor.commit();
         Log.d(BASE_TAG, "Update preferences");
     }
+
+    public boolean getSharingState(){
+        return sharing;
+    }
+
+
+    // auto hiding during sharing
+    public void addToSharingHiddenViews(View view) {
+        autoHiddenViews.add(view);
+    }
+
+    public void addToSharingHiddenViews(List<View> views) {
+        autoHiddenViews.addAll(views);
+    }
+
+    public void addToSharingDisableViews(View view) {
+        autoDisableViews.add(view);
+    }
+
+    public void addToSharingDisableViews(List<View> views) {
+        autoDisableViews.addAll(views);
+    }
+
+
 }
 

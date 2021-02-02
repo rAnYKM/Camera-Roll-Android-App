@@ -10,5 +10,5 @@ interface ISharingModeServiceInterface {
      */
     int getSharingStatus();
 
-    int sendIAResult(int result, double score);
+         int sendIAResult(int result, double score);
 }

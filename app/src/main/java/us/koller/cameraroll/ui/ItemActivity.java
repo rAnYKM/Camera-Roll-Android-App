@@ -9,26 +9,25 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ShareCompat;
-import android.support.v4.app.SharedElementCallback;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.print.PrintHelper;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.ShareCompat;
+import androidx.core.app.SharedElementCallback;
+import androidx.core.content.ContextCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.print.PrintHelper;
+import androidx.viewpager.widget.ViewPager;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.transition.Transition;
@@ -66,7 +65,6 @@ import us.koller.cameraroll.data.fileOperations.Rename;
 import us.koller.cameraroll.data.models.File_POJO;
 import us.koller.cameraroll.data.models.Gif;
 import us.koller.cameraroll.data.models.Photo;
-import us.koller.cameraroll.data.models.RAWImage;
 import us.koller.cameraroll.data.provider.MediaProvider;
 import us.koller.cameraroll.data.Settings;
 import us.koller.cameraroll.data.models.Video;
@@ -111,21 +109,18 @@ public class ItemActivity extends ThemeableActivity {
     // sharing mode
     @Override
     public void onSharingStatusChanged(boolean status) {
-        // Log.d("DSA", "Child Class Invoked");
+        super.onSharingStatusChanged(status);
+        ImageView delete = findViewById(R.id.delete_button);
+        ImageView edit = findViewById(R.id.edit_button);
         if (status) {
             Log.d("Sharing", "status changed");
-            super.onSharingStatusChanged(status);
-            ImageView delete = findViewById(R.id.delete_button);
             ((View) delete.getParent()).setVisibility(View.GONE);
-
-            ImageView edit = findViewById(R.id.edit_button);
             ((View) edit.getParent()).setVisibility(View.GONE);
-            //recreate();
+        } else {
+            Log.d("Sharing", "status changed BACK");
+            ((View) delete.getParent()).setVisibility(View.VISIBLE);
+            ((View) edit.getParent()).setVisibility(View.VISIBLE);
         }
-        else {
-            super.onSharingStatusChanged(status);
-        }
-
     }
 
 
@@ -192,6 +187,9 @@ public class ItemActivity extends ThemeableActivity {
 
         view_only = getIntent().getBooleanExtra(VIEW_ONLY, false);
 
+//        addToSharingHiddenViews((View) findViewById(R.id.delete_button));
+//        addToSharingHiddenViews((View) findViewById(R.id.edit_button));
+
 
         if (!view_only && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && showAnimations()) {
             if (savedInstanceState == null) {
@@ -211,7 +209,12 @@ public class ItemActivity extends ThemeableActivity {
 
         bottomBar = findViewById(R.id.bottom_bar);
 
-        if (view_only || sharing) {
+        if (view_only || getSharingState()) {
+            if (getSharingState()) {
+                Log.i("OnCreate", "yes");
+            } else {
+                Log.i("OnCreate", "no");
+            }
             ImageView delete = findViewById(R.id.delete_button);
             ((View) delete.getParent()).setVisibility(View.GONE);
 

@@ -1,4 +1,4 @@
-package us.koller.cameraroll.dsa;
+package ca.uwaterloo.crysp.libdsaclient.dsa;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -9,9 +9,8 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.RemoteException;
-import android.support.v4.content.LocalBroadcastManager;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import android.util.Log;
-
 
 import ca.uwaterloo.crysp.sharingmodeservice.ISharingModeServiceInterface;
 
